@@ -1,5 +1,7 @@
 // AOC_2022_Day_2
 // Problem: https://adventofcode.com/2022/day/2
+
+use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
@@ -8,14 +10,16 @@ use std::any::type_name;
 // The output is wrapped in a Result to allow matching on errors
 // Returns an Iterator to the Reader of the lines of the file.
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where P: AsRef<Path>, {
+where P: AsRef<Path> + std::fmt::Debug, {
+    println!("Reading input from file: {:?}", filename);
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
 }
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
     // File input.txt must exist in current path before this produces output
-    if let Ok(lines) = read_lines("./input.txt") {
+    if let Ok(lines) = read_lines(&args[1]) {
         // Consumes the iterator, returns an (Optional) String
         let mut player_score = 0;
         for line in lines {
